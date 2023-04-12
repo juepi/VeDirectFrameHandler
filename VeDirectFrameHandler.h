@@ -22,12 +22,14 @@ class VeDirectFrameHandler {
 public:
     VeDirectFrameHandler();
     void rxData(uint8_t inbyte);                // byte of serial data to be passed by the application
+    int getIndexByName(char *);                 // derive array index from veName for given Name
 
     char veName[buffLen][nameLen] = { };        // public buffer for received names
     char veValue[buffLen][valueLen] = { };      // public buffer for received values
 
     int frameIndex;                             // which line of the frame are we on
     int veEnd;                                  // current size (end) of the public buffer
+    uint32_t frameCounter;                      // Counts valid frames
 
 private:
     //bool mStop;                               // not sure what Victron uses this for, not using

@@ -48,6 +48,7 @@ VeDirectFrameHandler::VeDirectFrameHandler() :
     tempName(),
     tempValue(),
 	frameIndex(0),
+	frameCounter(0),
 	veName(),
 	veValue(),
 	veEnd(0)
@@ -153,9 +154,11 @@ void VeDirectFrameHandler::rxData(uint8_t inbyte)
  * This function is called every time a new name/value is successfully parsed.  It writes the values to the temporary buffer.
  */
 void VeDirectFrameHandler::textRxEvent(char * mName, char * mValue) {
-    strcpy(tempName[frameIndex], mName);    // copy name to temporary buffer
-    strcpy(tempValue[frameIndex], mValue);  // copy value to temporary buffer
-	frameIndex++;
+	if (frameIndex < frameLen) {
+    	strcpy(tempName[frameIndex], mName);    // copy name to temporary buffer
+    	strcpy(tempValue[frameIndex], mValue);  // copy value to temporary buffer
+		frameIndex++;
+	}
 }
 
 /*
@@ -186,6 +189,7 @@ void VeDirectFrameHandler::frameEndEvent(bool valid) {
 		}
 	}
 	frameIndex = 0;	// reset frame
+	frameCounter++; // increase received frame counter
 }
 
 /*
@@ -206,4 +210,20 @@ void VeDirectFrameHandler::logE(char * module, char * error) {
  */
 bool VeDirectFrameHandler::hexRxEvent(uint8_t inbyte) {
 	return true;		// stubbed out for future
+}
+
+/*
+ *	getIndexByName
+ *  This function allows you to derive the veName array index from a given Name
+ *  returns 255 if given name does not exist in veName	
+ */
+int VeDirectFrameHandler::getIndexByName(char * checkName) {
+	for ( int i = 0; i < veEnd; i++ ) {
+		if (strcmp(checkName, veName[i]) == 0) {
+			// Got match, return Index number
+			return i
+		}
+	}
+	// no match
+	return 255
 }
