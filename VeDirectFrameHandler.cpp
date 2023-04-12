@@ -221,9 +221,9 @@ int VeDirectFrameHandler::getIndexByName(char * checkName) {
 	for ( int i = 0; i < veEnd; i++ ) {
 		if (strcmp(checkName, veName[i]) == 0) {
 			// Got match, return Index number
-			return i
+			return i;
 		}
 	}
 	// no match
-	return 255
+	return 255;
 }
